@@ -3,6 +3,8 @@ import numpy as np
 
 from physics import PhysicsEngine
 from renderer import Renderer
+from pygame_renderer import PygameRenderer
+
 from world import World
 
 from objects import RobotTree, TwoLink, Tree7, CartPole
@@ -15,6 +17,7 @@ def main():
 
     physics = PhysicsEngine(fd_solver, gravity=[0.0, -9.81, 0.0])
     renderer = Renderer()
+    # renderer = PygameRenderer()
 
     world = World(physics, renderer)
 
