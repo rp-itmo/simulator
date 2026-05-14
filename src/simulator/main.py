@@ -16,8 +16,8 @@ def main():
     fd_solver = ABAlgorithm()
 
     physics = PhysicsEngine(fd_solver, gravity=[0.0, -9.81, 0.0])
-    renderer = Renderer()
-    # renderer = PygameRenderer()
+    # renderer = Renderer()
+    renderer = PygameRenderer()
 
     world = World(physics, renderer)
 
