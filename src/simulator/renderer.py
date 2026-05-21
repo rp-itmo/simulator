@@ -1,7 +1,7 @@
 import numpy as np
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Rectangle
+from matplotlib.patches import Circle, Rectangle, Polygon  # Added Polygon
 from matplotlib.collections import LineCollection
 
 
@@ -34,6 +34,49 @@ class Renderer:
         self.colors = plt.cm.rainbow(np.linspace(0, 1, max_colors))
 
         self.base_patch = None
+
+    # New functions for drawing primitives
+
+    def clear(self):
+        """Clears the current drawing, resetting the axes for the next frame."""
+        self.ax.cla()
+        # Reset limits and aspect ratio after clearing
+        self.ax.set_xlim(-self.view_size, self.view_size)
+        self.ax.set_ylim(-self.view_size, self.view_size)
+        self.ax.set_aspect("equal")
+        
+        # Redraw world frame axes
+        self.ax.axhline(0, color='black', lw=1, alpha=0.2)
+        self.ax.axvline(0, color='black', lw=1, alpha=0.2)
+
+    def draw_line(self, start, end, color='blue', linewidth=2):
+        """Draws a line between two points [x, y]"""
+        self.ax.plot([start[0], end[0]], [start[1], end[1]], color=color, linewidth=linewidth)
+
+    def draw_circle(self, center, radius=0.2, color='lightblue', fill=True):
+        """Draws a circle (joint)"""
+        circle = Circle(center, radius, color=color, fill=fill)
+        self.ax.add_patch(circle)
+        return circle
+
+    def draw_rectangle(self, bottom_left, width, height, color='gray', fill=True):
+        """Draws a rectangle (box)"""
+        rect = Rectangle(bottom_left, width, height, color=color, fill=fill)
+        self.ax.add_patch(rect)
+        return rect
+
+    def draw_polygon(self, vertices, color='green', fill=True):
+        """Draws a polygon from a list of vertices [(x1, y1), (x2, y2), ...]"""
+        poly = Polygon(vertices, color=color, fill=fill)
+        self.ax.add_patch(poly)
+        return poly
+
+    def draw_text(self, position, text, fontsize=10, color='black'):
+        """Draws text at the specified position [x, y]"""
+        self.ax.text(position[0], position[1], text, fontsize=fontsize, color=color)
+        return None
+
+    # End of new functions for drawing primitives
 
     def update(self, objects, dt=0.0001):
 
@@ -89,9 +132,7 @@ class Renderer:
                 self.links_lines = LineCollection(links, colors=self.colors, linewidths=3)
                 self.ax.add_collection(self.links_lines)
 
-                self.joints_circles = self.ax.scatter(
-                    points[:, 0], points[:, 1], c="lightblue", s=40, zorder=10
-                )
+                self.joints_circles = self.ax.scatter(points[:, 0], points[:, 1], c="lightblue", s=40, zorder=10)
                 self.ax.scatter(0.0, 0.0, c="blue", s=50, zorder=10)
             else:
                 self.links_lines.set_segments(links)
