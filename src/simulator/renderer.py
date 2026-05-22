@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Rectangle
 from matplotlib.collections import LineCollection
 
+from .video_recorder import VideoRecorder, create_recorder
 
 class Renderer:
-    def __init__(self, x_limits=(-10.0, 10.0), y_limits=(-10.0, 10.0), max_colors=20) -> None:
+    def __init__(self, x_limits=(-10.0, 10.0), y_limits=(-10.0, 10.0), max_colors=20, record_path: str | None = None, record_fps: float = 30.0,record_format: str | None = None, ) -> None:
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, aspect="equal")
         self.ax.set_xlim(x_limits)
@@ -34,7 +35,27 @@ class Renderer:
         self.colors = plt.cm.rainbow(np.linspace(0, 1, max_colors))
 
         self.base_patch = None
+        # Video recording setup (deferred until first frame size is known)
 
+        self._recorder: VideoRecorder | None = None
+        self._record_enabled = record_path is not None
+        self._record_path = record_path
+        self._record_fps = record_fps
+        self._record_format = record_format
+
+    def _start_recording_if_needed(self, frame_size: tuple[int, int]) -> None:
+        """Start recording if enabled and not already started.
+
+        Args:
+            frame_size: (width, height) of the frame.
+        """
+        if self._recorder is None and self._record_enabled:
+            self._recorder = create_recorder(
+                output_path=self._record_path,
+                fps=self._record_fps,
+                format=self._record_format,
+            )
+            self._recorder.start(frame_size)
     def update(self, objects, dt=0.0001):
 
         if not objects:
@@ -99,6 +120,23 @@ class Renderer:
 
         self.fig.canvas.draw_idle()
         self.fig.canvas.flush_events()
+        # Record frame if recording is enabled
+        if self._record_enabled:
+            frame = np.array(self.fig.canvas.buffer_rgba())
+            height, width = frame.shape[:2]
+            frame_size = (width, height)
+            self._start_recording_if_needed(frame_size)
+
+            if self._recorder is not None and self._recorder.is_recording():
+                self._recorder.add_frame(frame)
+
 
     def close(self):
+        """Close the renderer and finalize video recording."""
+        if self._recorder is not None and self._recorder.is_recording():
+            self._recorder.stop()
         plt.close(self.fig)
+
+    def is_recording(self) -> bool:
+        """Check if video recording is active."""
+        return self._recorder is not None and self._recorder.is_recording()
