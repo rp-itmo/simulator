@@ -49,32 +49,55 @@ class Renderer:
         self.ax.axhline(0, color='black', lw=1, alpha=0.2)
         self.ax.axvline(0, color='black', lw=1, alpha=0.2)
 
-    def draw_line(self, start, end, color='blue', linewidth=2):
-        """Draws a line between two points [x, y]"""
-        self.ax.plot([start[0], end[0]], [start[1], end[1]], color=color, linewidth=linewidth)
-
-    def draw_circle(self, center, radius=0.2, color='lightblue', fill=True):
-        """Draws a circle (joint)"""
-        circle = Circle(center, radius, color=color, fill=fill)
+    def draw_line(self, start, end, color='black', linewidth=2.0, alpha=1.0, **kwargs):
+        """Draws a line between two points [x,y]."""
+        self.ax.plot([start[0], end[0]], [start[1], end[1]],
+                    color=color, linewidth=linewidth, alpha=alpha, **kwargs)
+        self.fig.canvas.draw_idle()
+    
+   
+    def draw_circle(self, center, radius=1.0, color='lightblue', fill=True,
+                    alpha=1.0, linewidth=1.0, **kwargs):
+        """Draws a circle with given center [x,y] and radius."""
+        circle = Circle((center[0], center[1]), radius=radius,
+                        color=color, fill=fill, alpha=alpha,
+                        linewidth=linewidth, **kwargs)
         self.ax.add_patch(circle)
+        self.fig.canvas.draw_idle()
         return circle
 
-    def draw_rectangle(self, bottom_left, width, height, color='gray', fill=True):
-        """Draws a rectangle (box)"""
-        rect = Rectangle(bottom_left, width, height, color=color, fill=fill)
+    def draw_rectangle(self, pos, width, height, angle=0.0, color='gray',
+                       fill=True, alpha=1.0, **kwargs):
+        """
+        Draws a rectangle with center at `pos` (list/tuple [x,y]).
+        Width and height specify the dimensions.
+        """
+        x = pos[0] - width / 2
+        y = pos[1] - height / 2
+        rect = Rectangle((x, y), width, height, angle=angle,
+                        facecolor=color if fill else 'none',
+                        edgecolor=color, fill=fill, alpha=alpha, **kwargs)
         self.ax.add_patch(rect)
+        self.fig.canvas.draw_idle()
         return rect
 
-    def draw_polygon(self, vertices, color='green', fill=True):
-        """Draws a polygon from a list of vertices [(x1, y1), (x2, y2), ...]"""
-        poly = Polygon(vertices, color=color, fill=fill)
+    def draw_polygon(self, vertices, color='green', 
+                     fill=True, alpha=1.0, linewidth=1.0, **kwargs):
+        """Draws a polygon from a list of vertices [(x1,y1), ...]."""
+        poly = Polygon(vertices, facecolor=color if fill else 'none', 
+                       edgecolor=color, fill=fill, alpha=alpha, 
+                       linewidth=linewidth, **kwargs)
         self.ax.add_patch(poly)
+        self.fig.canvas.draw_idle()
         return poly
+    
 
-    def draw_text(self, position, text, fontsize=10, color='black'):
-        """Draws text at the specified position [x, y]"""
-        self.ax.text(position[0], position[1], text, fontsize=fontsize, color=color)
-        return None
+    def draw_text(self, position, text, fontsize=10, color='black', alpha=1.0, **kwargs):
+        """Draws text at position [x,y]."""
+        txt = self.ax.text(position[0], position[1], text, 
+                           fontsize=fontsize, color=color, alpha=alpha, **kwargs)
+        self.fig.canvas.draw_idle()
+        return txt
 
     # End of new functions for drawing primitives
 

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Rectangle, Polygon
 import numpy as np
 
-from renderer import Renderer
+from src.simulator.renderer import Renderer
 
 
 @pytest.fixture(autouse=True)
