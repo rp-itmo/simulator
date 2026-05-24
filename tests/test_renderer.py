@@ -18,6 +18,7 @@ def close_figures():
 def renderer():
     return Renderer()
 
+
 # Tests for draw_line()
 class TestDrawLine:
     def test_adds_a_line_to_axes(self, renderer):
@@ -53,7 +54,8 @@ class TestDrawLine:
         renderer.draw_line([5, 5], [5, 5])
         assert len(renderer.ax.lines) >= 1
 
-# Tests for draw_Circle()
+
+# Tests for draw_circle()
 class TestDrawCircle:
     def test_returns_circle_patch(self, renderer):
         result = renderer.draw_circle([0, 0], radius=1.0)
@@ -73,6 +75,11 @@ class TestDrawCircle:
         circle = renderer.draw_circle([0, 0], radius=1.0)
         assert circle.get_fill() is True
 
+    # fill=False should render the circle as outline only
+    def test_filled_false(self, renderer):
+        circle = renderer.draw_circle([0, 0], radius=1.0, fill=False)
+        assert circle.get_fill() is False
+
     def test_custom_color(self, renderer):
         circle = renderer.draw_circle([0, 0], radius=1.0, color='red')
         assert circle.get_facecolor() is not None
@@ -81,7 +88,8 @@ class TestDrawCircle:
         circle = renderer.draw_circle([0, 0], radius=2.5)
         assert circle.radius == 2.5
 
-# Tests for draw_Rectangle()
+
+# Tests for draw_rectangle()
 class TestDrawRectangle:
     def test_returns_rectangle_patch(self, renderer):
         result = renderer.draw_rectangle([0, 0], 2, 1)
@@ -103,6 +111,11 @@ class TestDrawRectangle:
         rect = renderer.draw_rectangle([0, 0], 1, 1)
         assert rect.get_fill() is True
 
+    # fill=False should render the rectangle as outline only
+    def test_filled_false(self, renderer):
+        rect = renderer.draw_rectangle([0, 0], 1, 1, fill=False)
+        assert rect.get_fill() is False
+
     def test_custom_color(self, renderer):
         rect = renderer.draw_rectangle([0, 0], 1, 1, color='blue')
         assert rect.get_facecolor() is not None
@@ -112,7 +125,8 @@ class TestDrawRectangle:
         assert rect.get_width() == 0
         assert rect.get_height() == 0
 
-# Tests for draw_Polygon()
+
+# Tests for draw_polygon()
 class TestDrawPolygon:
     def test_returns_polygon_patch(self, renderer):
         result = renderer.draw_polygon([(0, 0), (1, 0), (0.5, 1)])
@@ -126,6 +140,11 @@ class TestDrawPolygon:
     def test_default_filled(self, renderer):
         poly = renderer.draw_polygon([(0, 0), (1, 0), (0.5, 1)])
         assert poly.get_fill() is True
+
+    # fill=False should render the polygon as outline only
+    def test_filled_false(self, renderer):
+        poly = renderer.draw_polygon([(0, 0), (1, 0), (0.5, 1)], fill=False)
+        assert poly.get_fill() is False
 
     def test_custom_color(self, renderer):
         poly = renderer.draw_polygon([(0, 0), (1, 0), (0.5, 1)], color='red')
@@ -141,7 +160,8 @@ class TestDrawPolygon:
         poly = renderer.draw_polygon(verts)
         assert isinstance(poly, Polygon)
 
-# Tests for draw_Text()
+
+# Tests for draw_text()
 class TestDrawText:
     def test_returns_text_object(self, renderer):
         result = renderer.draw_text([0, 0], 'hello')
@@ -179,6 +199,7 @@ class TestDrawText:
         assert txt.get_text() == 'Hello Robot'
 
 
+# Integration tests — verifies all primitives work together
 class TestIntegration:
     def test_multiple_shapes_all_added(self, renderer):
         renderer.draw_line([0, 0], [1, 1])
