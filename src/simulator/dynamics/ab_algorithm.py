@@ -65,7 +65,7 @@ class ABAlgorithm:
                 a[i] = Xup[i] @ (-a_grav) + c[i]
             else:
                 a[i] = Xup[i] @ a[parent] + c[i]
-            qdd[i] = (u[i] - U[i].T @ a[i]) / d[i]
+            qdd[i] = ((u[i] - U[i].T @ a[i]) / d[i]).item()
             a[i] = a[i] + S[i].dot(qdd[i])
 
         return qdd
@@ -80,9 +80,18 @@ class ABAlgorithm:
 
     def jcalc(self, jtyp, q):
         joint_map = {
-            "Rx": (lambda q: SE3(SO3.rx(q).T).adjoint(), np.array([[1], [0], [0], [0], [0], [0]])),
-            "Ry": (lambda q: SE3(SO3.ry(q).T).adjoint(), np.array([[0], [1], [0], [0], [0], [0]])),
-            "Rz": (lambda q: SE3(SO3.rz(q).T).adjoint(), np.array([[0], [0], [1], [0], [0], [0]])),
+            "Rx": (
+                lambda q: SE3(SO3.rx(q).T).adjoint(),
+                np.array([[1], [0], [0], [0], [0], [0]]),
+            ),
+            "Ry": (
+                lambda q: SE3(SO3.ry(q).T).adjoint(),
+                np.array([[0], [1], [0], [0], [0], [0]]),
+            ),
+            "Rz": (
+                lambda q: SE3(SO3.rz(q).T).adjoint(),
+                np.array([[0], [0], [1], [0], [0], [0]]),
+            ),
             "Px": (
                 lambda q: SE3(SO3().matrix, [q, 0, 0]).adjoint(),
                 np.array([[0], [0], [0], [1], [0], [0]]),
