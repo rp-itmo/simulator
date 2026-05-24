@@ -4,17 +4,20 @@ A 2D robot physics simulator.
 
 ## Project Structure
 
+```
 src/simulator/
-├── renderer_base.py        # Abstract base classes for renderer and primitives
-├── renderer_primitives.py  # 2D shape data classes (Line, Circle, Rectangle, Polygon, Text)
-├── renderer.py             # Matplotlib renderer implementation
-├── physics.py              # Physics engine
-├── objects.py              # Robot objects
-├── world.py                # Simulation world
-└── controller.py           # Robot controller
+├── renderer_base.py        
+├── renderer_primitives.py  
+├── renderer.py             
+├── physics.py              
+├── objects.py              
+├── world.py                
+└── controller.py           
+
 tests/
-├── test_renderer_primitives.py  # Tests for primitive classes
-└── test_fb_dynamics.py          # Tests for floating base dynamics
+├── test_renderer_primitives.py  
+└── test_fb_dynamics.py          
+```
 
 
 ## Renderer Architecture
