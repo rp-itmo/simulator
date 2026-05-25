@@ -36,3 +36,6 @@ line-length = 100
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
