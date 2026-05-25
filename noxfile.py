@@ -11,4 +11,7 @@ def lint(session):
 @nox.session
 def tests(session):
     session.run("uv", "sync", "--dev", external=True)
-    session.run("uv", "run", "pytest", external=True)
+    session.run("uv", "pip", "install", "-e", ".", external=True)
+    session.run("uv", "run", "pytest", external=True, env={"PYTHONPATH": "src"})
+
+
