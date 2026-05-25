@@ -3,7 +3,7 @@ from renderer import Renderer
 
 from objects import CartPole
 
-class TestRendererBackend:
+class TestRenderer:
     REQUIRED_METHODS = {'update', '_draw_object', '_draw_robot_tree', 'draw_line', 'draw_circle', 'draw_box', 'close'}
     
     @pytest.mark.parametrize('method_name', REQUIRED_METHODS)
