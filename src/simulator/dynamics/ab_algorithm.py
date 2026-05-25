@@ -65,7 +65,7 @@ class ABAlgorithm:
                 a[i] = Xup[i] @ (-a_grav) + c[i]
             else:
                 a[i] = Xup[i] @ a[parent] + c[i]
-            qdd[i] = (u[i] - U[i].T @ a[i]) / d[i]
+            qdd[i] = float(np.squeeze((u[i] - U[i].T @ a[i]) / d[i]))
             a[i] = a[i] + S[i].dot(qdd[i])
 
         return qdd

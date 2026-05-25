@@ -1,4 +1,4 @@
 
 
-def mock_test():
+def test_mock():
     assert(True == True)

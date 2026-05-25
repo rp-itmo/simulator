@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.4.4",
+    "scipy",
+    "matplotlib",
     "pre-commit>=4.6.0",
     "pytest>=9.0.3",
     "ruff>=0.15.12",
@@ -35,3 +37,8 @@ line-length = 100
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src/simulator"]
+testpaths = ["tests"]
+python_files = "test_*.py"
