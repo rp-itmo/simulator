@@ -10,3 +10,8 @@ To run project, use the following command
 ```
 uv run python src/simulator/main.py
 ```
+
+To run tests, use the following command
+```
+uv run pytest
+```
