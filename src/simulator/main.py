@@ -1,34 +1,25 @@
-import sys
-import numpy as np
+import time
+import matplotlib.pyplot as plt
 
-from physics import PhysicsEngine
 from renderer import Renderer
 from world import World
 
-from objects import RobotTree, TwoLink, Tree7, CartPole
-from dynamics.ab_algorithm import ABAlgorithm
-
 
 def main():
-
-    fd_solver = ABAlgorithm()
-
-    physics = PhysicsEngine(fd_solver, gravity=[0.0, -9.81, 0.0])
     renderer = Renderer()
+    world = World()
 
-    world = World(physics, renderer)
+    try:
+        while plt.fignum_exists(renderer.fig.number):
+            world.update()
+            renderer.update(world.get_objects())
+            time.sleep(0.02)
 
-    # robot = TwoLink()
-    # robot = Tree7()
+    except KeyboardInterrupt:
+        pass
 
-    # robot = RobotTree()
-    # robot.some_tree(8,2)
-
-    robot = CartPole()
-
-    world.add_object(robot)
-
-    world.run(1000)
+    finally:
+        renderer.close()
 
 
 if __name__ == "__main__":
