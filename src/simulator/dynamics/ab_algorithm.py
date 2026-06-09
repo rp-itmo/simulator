@@ -1,7 +1,7 @@
 import numpy as np
 
-from spatial.so import SO3, so3
-from spatial.se import SE3, se3, crm, crf
+from simulator.spatial.so import SO3, so3
+from simulator.spatial.se import SE3, se3,crf,crm
 
 
 class ABAlgorithm:
@@ -65,7 +65,7 @@ class ABAlgorithm:
                 a[i] = Xup[i] @ (-a_grav) + c[i]
             else:
                 a[i] = Xup[i] @ a[parent] + c[i]
-            qdd[i] = (u[i] - U[i].T @ a[i]) / d[i]
+            qdd[i] = np.asarray((u[i] - U[i].T @ a[i]) / d[i]).item()
             a[i] = a[i] + S[i].dot(qdd[i])
 
         return qdd

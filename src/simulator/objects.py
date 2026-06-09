@@ -1,7 +1,7 @@
 import numpy as np
 import math
-from spatial.se import SE3, se3, skew
-from spatial.so import SO3, so3
+from simulator.spatial.se import SE3, se3, skew
+from simulator.spatial.so import SO3, so3
 
 
 def mcI(mass, com, Icm):
