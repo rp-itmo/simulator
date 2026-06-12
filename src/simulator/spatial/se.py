@@ -1,6 +1,6 @@
 import numpy as np
-from spatial.so import SO3, so3
-
+#from spatial.so import SO3, so3
+from .so import SO3, so3
 
 def skew(v):
     v = v.flatten()
