@@ -1,7 +1,7 @@
 import numpy as np
 
-from spatial.so import SO3, so3
-from spatial.se import SE3, se3,crf,crm
+from ..spatial.so import SO3, so3
+from ..spatial.se import SE3, se3, crm, crf
 
 
 class ABAlgorithm:
@@ -45,8 +45,8 @@ class ABAlgorithm:
 
         for i in reversed(range(NB)):
             U[i] = IA[i] @ S[i]
-            d[i] = S[i].T @ U[i]
-            u[i] = tau[i] - S[i].T @ pA[i]
+            d[i] = (S[i].T @ U[i])[0, 0]  # Extract scalar from 1x1 matrix
+            u[i] = tau[i] - (S[i].T @ pA[i])[0, 0]
 
             parent = model["parent"][i]
             if parent != -1:
@@ -65,7 +65,7 @@ class ABAlgorithm:
                 a[i] = Xup[i] @ (-a_grav) + c[i]
             else:
                 a[i] = Xup[i] @ a[parent] + c[i]
-            qdd[i] = np.asarray((u[i] - U[i].T @ a[i]) / d[i]).item()
+            qdd[i] = (u[i] - (U[i].T @ a[i])[0, 0]) / d[i]  # Extract scalar from 1x1 matrix
             a[i] = a[i] + S[i].dot(qdd[i])
 
         return qdd
