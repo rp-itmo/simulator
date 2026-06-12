@@ -1,13 +1,36 @@
-import numpy as np
+"""Matplotlib-based renderer for robot simulations."""
 
+from __future__ import annotations
+
+import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Rectangle
 from matplotlib.collections import LineCollection
 
 from .video_recorder import VideoRecorder, create_recorder
 
+
 class Renderer:
-    def __init__(self, x_limits=(-10.0, 10.0), y_limits=(-10.0, 10.0), max_colors=20, record_path: str | None = None, record_fps: float = 30.0,record_format: str | None = None, ) -> None:
+    """Matplotlib-based renderer with video recording support."""
+
+    def __init__(
+        self,
+        x_limits=(-10.0, 10.0),
+        y_limits=(-10.0, 10.0),
+        max_colors=20,
+        record_path: str | None = None,
+        record_fps: float = 30.0,
+        record_format: str | None = None,
+    ) -> None:
+        """Initialize the renderer.
+
+        Args:
+            x_limits: Horizontal axis limits (min, max).
+            y_limits: Vertical axis limits (min, max).
+            max_colors: Maximum number of colors for robot links.
+            record_path: If set, enable recording to this file path.
+            record_fps: Frame rate for video recording.
+            record_format: Recording format ("mp4" or "avi"). Auto-detected if None.
+        """
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, aspect="equal")
         self.ax.set_xlim(x_limits)
@@ -35,8 +58,8 @@ class Renderer:
         self.colors = plt.cm.rainbow(np.linspace(0, 1, max_colors))
 
         self.base_patch = None
-        # Video recording setup (deferred until first frame size is known)
 
+        # Video recording setup (deferred until first frame size is known)
         self._recorder: VideoRecorder | None = None
         self._record_enabled = record_path is not None
         self._record_path = record_path
@@ -56,8 +79,14 @@ class Renderer:
                 format=self._record_format,
             )
             self._recorder.start(frame_size)
-    def update(self, objects, dt=0.0001):
 
+    def update(self, objects, dt=0.0001):
+        """Update the visualization and optionally record frames.
+
+        Args:
+            objects: List of robot objects to render.
+            dt: Time step (for reference, not used in rendering).
+        """
         if not objects:
             return
 
@@ -120,6 +149,7 @@ class Renderer:
 
         self.fig.canvas.draw_idle()
         self.fig.canvas.flush_events()
+
         # Record frame if recording is enabled
         if self._record_enabled:
             frame = np.array(self.fig.canvas.buffer_rgba())
@@ -129,7 +159,6 @@ class Renderer:
 
             if self._recorder is not None and self._recorder.is_recording():
                 self._recorder.add_frame(frame)
-
 
     def close(self):
         """Close the renderer and finalize video recording."""
