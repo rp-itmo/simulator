@@ -1,11 +1,18 @@
-""" Video recording methods and function for simulater with OpenCV"""
-import cv2
+"""Video recording functionality for the simulator using OpenCV."""
+
+from __future__ import annotations
+
 import pathlib
+from typing import Literal
+
+import cv2
 import numpy as np
-from typing import Literal 
+
 
 class VideoRecorder:
-    """Records simulation frames to video files using OpenCV with supporting MP4 and AVI output formats
+    """Records simulation frames to video files using OpenCV.
+
+    Supports MP4 and AVI output formats.
     """
 
     def __init__(
@@ -14,11 +21,12 @@ class VideoRecorder:
         fps: float = 30.0,
         format: Literal["mp4", "avi"] = "mp4",
     ) -> None:
-        """Initialize the video recorder:
+        """Initialize the video recorder.
+
         Args:
-            output_path: Path to save the output video file
-            fps: Frames per second for the output vide
-            format: Output format, either "mp4" or "avi"
+            output_path: Path to save the output video file.
+            fps: Frames per second for the output video.
+            format: Output format, either "mp4" or "avi".
         """
         self.output_path = pathlib.Path(output_path)
         self.fps = fps
@@ -27,10 +35,10 @@ class VideoRecorder:
         self._frame_size: tuple[int, int] | None = None
 
     def start(self, frame_size: tuple[int, int]) -> None:
-        """Start recording - creates the output file writer
+        """Start recording - creates the output file writer.
 
         Args:
-            frame_size: (width, height) of each frame
+            frame_size: (width, height) of each frame.
         """
         if self._writer is not None:
             msg = "Recorder already started"
@@ -38,7 +46,8 @@ class VideoRecorder:
 
         self._frame_size = frame_size
 
-       
+        # Ensure parent directory exists
+        self.output_path.parent.mkdir(parents=True, exist_ok=True)
 
         if self.format == "mp4":
             fourcc = cv2.VideoWriter_fourcc(*"mp4v")
@@ -58,6 +67,7 @@ class VideoRecorder:
         if not self._writer.isOpened():
             msg = f"Failed to open video writer for {self.output_path}"
             raise RuntimeError(msg)
+
     def add_frame(self, frame: np.ndarray) -> None:
         """Add a frame to the recording.
 
@@ -71,11 +81,10 @@ class VideoRecorder:
         # OpenCV expects BGR format for VideoWriter
         if len(frame.shape) == 3 and frame.shape[2] == 4:
             # RGBA to BGR
-            frame = frame[:, :, :3]
-
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
         elif len(frame.shape) == 3 and frame.shape[2] == 3:
             # RGB to BGR
-            pass
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
         self._writer.write(frame)
 
@@ -85,11 +94,13 @@ class VideoRecorder:
             msg = "Recorder not started"
             raise RuntimeError(msg)
 
+        self._writer.release()
         self._writer = None
 
     def is_recording(self) -> bool:
         """Check if the recorder is currently active."""
         return self._writer is not None and self._writer.isOpened()
+
 
 def create_recorder(
     output_path: str | pathlib.Path,
@@ -101,12 +112,12 @@ def create_recorder(
     Automatically detects format from file extension if not specified.
 
     Args:
-        output_path: Path to save the output video file
-        fps: Frames per second for the output vide
-        format: Output format, either "mp4" or "avi"and  Auto-detected if None
+        output_path: Path to save the output video file.
+        fps: Frames per second for the output video.
+        format: Output format, either "mp4" or "avi". Auto-detected if None.
 
     Returns:
-        Configured VideoRecorder instance
+        Configured VideoRecorder instance.
     """
     path = pathlib.Path(output_path)
     if format is None:
