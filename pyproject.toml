@@ -8,13 +8,14 @@ dependencies = [
     "numpy>=2.4.4",
     "matplotlib>=3.10.0",
     "scipy>=1.16.0",
+    "pyzmq>=26.0.0",
     "pre-commit>=4.6.0",
     "pytest>=9.0.3",
     "ruff>=0.15.12",
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["src", "."]
 
 [tool.ruff.lint]
 unfixable = ["ALL"]
