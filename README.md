@@ -62,7 +62,9 @@ The system was tested with an initial pendulum deviation of approximately 17 deg
 
 The pendulum angle converges to zero within approximately 4 seconds, following a single overshoot transient. The drone returns to its original hover position after the transient settles, and the control inputs converge to the steady-state hover thrust.
 
-**Demonstration video:** [examples/quadrotor_drone/results/demonstrate.mp4](examples/quadrotor_drone/results/demonstrate.mp4)
+**Simulation demo (in-repo):** [examples/quadrotor_drone/results/demonstrate.mp4](examples/quadrotor_drone/results/demonstrate.mp4)
+
+**Defense presentation video:** [Google Drive Link](https://drive.google.com/file/d/1W1nPJ9DKxFgFF4hnCv4SaLMkGTNO-J_c/view?usp=sharing)
 
 ## Running the Simulation
 
