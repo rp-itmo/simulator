@@ -8,6 +8,7 @@ dependencies = [
     "numpy>=2.4.4",
     "pre-commit>=4.6.0",
     "pytest>=9.0.3",
+    "pyzmq>=27.1.0",
     "ruff>=0.15.12",
 ]
 
