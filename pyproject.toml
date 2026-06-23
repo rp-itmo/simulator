@@ -10,6 +10,7 @@ dependencies = [
     "pytest>=9.0.3",
     "pyzmq>=27.1.0",
     "ruff>=0.15.12",
+    "scipy>=1.18.0",
 ]
 
 [tool.ruff.lint]
