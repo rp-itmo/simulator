@@ -1,4 +1,4 @@
-\# Rocket Drone LQR
+# Rocket Drone LQR
 
 
 
