@@ -1,0 +1,13 @@
+@echo off
+echo [1/3] Starting MuJoCo Simulator Node (Port 5555)...
+start "Simulator" python simulator_node.py
+
+echo Waiting 2 seconds for Simulator to bind...
+timeout /t 2 /nobreak >nul
+
+echo [2/3] Starting Controller Node (RRT + MPC)...
+start "Controller" python controller_node.py
+
+:: Start the plotter immediately after so it doesn't miss the RRT map data!
+echo [3/3] Starting Plotter Dashboard Node (Port 5556)...
+start "Plotter" python plotter_node.py
