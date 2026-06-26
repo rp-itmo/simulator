@@ -143,7 +143,7 @@ F3  боковая тяга
 
 ```text
 
-rocket\_drone\_lqr/
+rocket_drone_lqr/
 
 
 
@@ -151,13 +151,13 @@ communication/
 
 &#x20;   messages.py
 
-&#x20;   zmq\_protocol.py
+&#x20;   zmq_protocol.py
 
 
 
 control/
 
-&#x20;   lqr\_controller.py
+&#x20;   lqr_controller.py
 
 
 
@@ -173,23 +173,23 @@ sim/
 
 tests/
 
-&#x20;   test\_dynamics.py
+&#x20;   test_dynamics.py
 
-&#x20;   test\_lqr\_controller.py
+&#x20;   test_lqr_controller.py
 
-&#x20;   test\_messages.py
+&#x20;   test_messages.py
 
-&#x20;   test\_zmq\_protocol.py
-
-
-
-demo\_closed\_loop.py
+&#x20;   test_zmq_protocol.py
 
 
 
-run\_controller.py
+demo_closed_loop.py
 
-run\_simulator.py
+
+
+run_controller.py
+
+run_simulator.py
 
 ```
 # Локальный запуск
@@ -198,14 +198,14 @@ run\_simulator.py
 
 ```bash
 
-python -m examples.rocket\_drone\_lqr.demo\_closed\_loop
+python -m examples.rocket_drone_lqr.demo_closed_loop
 
 ```
 # Запуск через ZeroMQ
 Окно №1:
 ```bash
 
-python -m examples.rocket\_drone\_lqr.run\_controller
+python -m examples.rocket_drone_lqr.run_controller
 
 ```
 
@@ -213,7 +213,7 @@ python -m examples.rocket\_drone\_lqr.run\_controller
 
 ```bash
 
-python -m examples.rocket\_drone\_lqr.run\_simulator
+python -m examples.rocket_drone_lqr.run_simulator
 
 ```
 
@@ -226,13 +226,13 @@ python -m examples.rocket\_drone\_lqr.run\_simulator
 
 ```text
 
-x\_ref
+x_ref
 
-z\_ref
+z_ref
 
-vx\_ref
+vx_ref
 
-vz\_ref
+vz_ref
 
 ```
 
@@ -242,7 +242,7 @@ vz\_ref
 
 ```bash
 
-uv run pytest examples/rocket\_drone\_lqr/tests
+uv run pytest examples/rocket_drone_lqr/tests
 
 ```
 
